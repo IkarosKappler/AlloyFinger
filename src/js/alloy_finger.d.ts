@@ -28,7 +28,7 @@ interface Touch {
 interface TouchList extends Array<Touch> {
     item: (index: number) => Touch;
 }
-interface AFTouchEvent<N extends EventName> {
+interface AFTouchGenericEvent<N extends EventName> {
     _ename: N;
     touches: TouchList;
     angle: number;
@@ -37,15 +37,17 @@ interface AFTouchEvent<N extends EventName> {
     deltaY: number;
     direction: SwipeDirection;
 }
-export interface TouchRotateEvent extends Pick<AFTouchEvent<"rotate">, "touches" | "angle"> {
+interface AFTouchEvent<N extends EventName> extends Pick<AFTouchGenericEvent<N>, "touches"> {
 }
-export interface TouchPinchEvent extends Pick<AFTouchEvent<"pinch">, "touches" | "zoom"> {
+export interface TouchRotateEvent extends Pick<AFTouchGenericEvent<"rotate">, "touches" | "angle"> {
 }
-export interface TouchMoveEvent extends Pick<AFTouchEvent<"touchMove">, "touches" | "deltaX" | "deltaY"> {
+export interface TouchPinchEvent extends Pick<AFTouchGenericEvent<"pinch">, "touches" | "zoom"> {
 }
-export interface TouchPressMoveEvent extends Pick<AFTouchEvent<"pressMove">, "touches" | "deltaX" | "deltaY"> {
+export interface TouchMoveEvent extends Pick<AFTouchGenericEvent<"touchMove">, "touches" | "deltaX" | "deltaY"> {
 }
-export interface TouchSwipeEvent extends Pick<AFTouchEvent<"swipe">, "touches" | "direction"> {
+export interface TouchPressMoveEvent extends Pick<AFTouchGenericEvent<"pressMove">, "touches" | "deltaX" | "deltaY"> {
+}
+export interface TouchSwipeEvent extends Pick<AFTouchGenericEvent<"swipe">, "touches" | "direction"> {
 }
 export declare type fn<E> = (evt: E) => void;
 interface AlloyFingerOptions {

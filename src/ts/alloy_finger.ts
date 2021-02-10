@@ -36,6 +36,7 @@ type EventName =
     "touchCancel";
 
 
+
 //--- Define Touch interfaces ----------------------------------------------------
 //--- This is just for internal use. ---------------------------------------------
 interface Touch {
@@ -60,7 +61,7 @@ interface TouchList extends Array<Touch> {
     item : (index:number)=>Touch;
 }
 
-interface AFTouchEvent<N extends EventName> {
+interface AFTouchGenericEvent<N extends EventName> {
     _ename : N; // This is just here to use the generic parameter 'N' at least once
     touches : TouchList;
     angle : number;
@@ -70,24 +71,27 @@ interface AFTouchEvent<N extends EventName> {
     direction : SwipeDirection;
 }
 
+interface AFTouchEvent<N extends EventName> extends Pick<AFTouchGenericEvent<N>, "touches"> {
+}
+
 export interface TouchRotateEvent
-extends Pick<AFTouchEvent<"rotate">, "touches" | "angle"> {
+extends Pick<AFTouchGenericEvent<"rotate">, "touches" | "angle"> {
 }
 
 export interface TouchPinchEvent
-extends Pick<AFTouchEvent<"pinch">, "touches" | "zoom"> {
+extends Pick<AFTouchGenericEvent<"pinch">, "touches" | "zoom"> {
 }
 
 export interface TouchMoveEvent
-extends Pick<AFTouchEvent<"touchMove">, "touches" | "deltaX" | "deltaY"> {
+extends Pick<AFTouchGenericEvent<"touchMove">, "touches" | "deltaX" | "deltaY"> {
 }
 
 export interface TouchPressMoveEvent
-extends Pick<AFTouchEvent<"pressMove">, "touches" | "deltaX" | "deltaY"> {
+extends Pick<AFTouchGenericEvent<"pressMove">, "touches" | "deltaX" | "deltaY"> {
 }
 
 export interface TouchSwipeEvent
-extends Pick<AFTouchEvent<"swipe">, "touches" | "direction"> {
+extends Pick<AFTouchGenericEvent<"swipe">, "touches" | "direction"> {
 }
 //--- END Touch interfaces ----------------------------------------------------
 
@@ -331,7 +335,7 @@ export class AlloyFinger {
     
     move( event : TouchEvent ) {
         if (!event.touches) return;
-	const afEvent : AFTouchEvent<any> = (event as unknown) as AFTouchEvent<any>;
+	const afEvent : AFTouchGenericEvent<any> = (event as unknown) as AFTouchGenericEvent<any>;
         var preV = this.preV,
         len = event.touches.length,
         currentX = event.touches[0].pageX,
@@ -401,7 +405,7 @@ export class AlloyFinger {
     
     end( event : TouchEvent ) {
         if (!event.changedTouches) return;
-	const afEvent : AFTouchEvent<any> = (event as unknown) as AFTouchEvent<any>;
+	const afEvent : AFTouchGenericEvent<any> = (event as unknown) as AFTouchGenericEvent<any>;
         this._cancelLongTap();
         var self : AlloyFinger = this;
         if (afEvent.touches.length < 2) {
