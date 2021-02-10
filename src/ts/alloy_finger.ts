@@ -147,10 +147,9 @@ const getRotateAngle = ( v1 : XYCoords, v2 : XYCoords ) : number => {
 }
 
 class HandlerAdmin<N extends EventName> {
-
-    // TODO: private?
-    handlers : Array<Handler<N,AFTouchEvent<N>>>;
-    el : HTMLElement | SVGElement; // HTMLElement | SVGElement?
+    
+    private handlers : Array<Handler<N,AFTouchEvent<N>>>;
+    private el : HTMLElement | SVGElement;
 
     constructor( el: HTMLElement | SVGElement ) {
 	this.handlers = [];
@@ -181,6 +180,7 @@ class HandlerAdmin<N extends EventName> {
     };
 } // END class HandlerAdmin
 
+
 /**
  * A wrapper for handlers.
  */
@@ -197,13 +197,6 @@ const wrapFunc = <N extends EventName>( el : HTMLElement | SVGElement, handler :
 export class AlloyFinger {
 
     element : HTMLElement | SVGElement;
-
-    // Huh?
-    /*
-    start : any;
-    move : any;
-    end : any;
-    cancel : any; */
 
     preV : XYCoords;
     pinchStartLen : number;
@@ -239,7 +232,7 @@ export class AlloyFinger {
     x2 : number;
     y1 : number;
     y2 : number; 
-    preTapPosition : XYCoords; // = { x: null, y: null };
+    preTapPosition : XYCoords;
 
     _preventTap : boolean;
     sx2 : number;
@@ -466,7 +459,6 @@ export class AlloyFinger {
         this.touchCancel.dispatch(evt, this.element);
     };
 
-    // TODO: private?
     private _cancelLongTap() {
         clearTimeout(this.longTapTimeout);
     };
@@ -492,7 +484,6 @@ export class AlloyFinger {
 	    // Force the generic parameter into it's expected canditate here ;)
 	    const admin : HandlerAdmin<N> = (this[evt] as HandlerAdmin<N>);
 	    admin.del(handler);
-            // this[evt].del(handler);
         }
     }; 
 
@@ -525,7 +516,6 @@ export class AlloyFinger {
 
         this.preV = this.pinchStartLen = this.zoom = this.isDoubleTap = this.delta = this.last = this.now = this.tapTimeout = this.singleTapTimeout = this.longTapTimeout = this.swipeTimeout = this.x1 = this.x2 = this.y1 = this.y2 = this.preTapPosition = this.rotate = this.touchStart = this.multipointStart = this.multipointEnd = this.pinch = this.swipe = this.tap = this.doubleTap = this.longTap = this.singleTap = this.pressMove = this.touchMove = this.touchEnd = this.touchCancel = this.twoFingerPressMove = null;
 
-	// TODO: globalThis ???
 	if( globalThis && typeof globalThis.removeEventListener === "function" ) {
             globalThis.removeEventListener('scroll', this._cancelAllHandler);
 	}

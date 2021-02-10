@@ -279,7 +279,6 @@ var AlloyFinger = /** @class */ (function () {
         this.touchCancel.dispatch(evt, this.element);
     };
     ;
-    // TODO: private?
     AlloyFinger.prototype._cancelLongTap = function () {
         clearTimeout(this.longTapTimeout);
     };
@@ -305,7 +304,6 @@ var AlloyFinger = /** @class */ (function () {
             // Force the generic parameter into it's expected canditate here ;)
             var admin = this[evt];
             admin.del(handler);
-            // this[evt].del(handler);
         }
     };
     ;
@@ -338,7 +336,6 @@ var AlloyFinger = /** @class */ (function () {
         this.touchEnd.del();
         this.touchCancel.del();
         this.preV = this.pinchStartLen = this.zoom = this.isDoubleTap = this.delta = this.last = this.now = this.tapTimeout = this.singleTapTimeout = this.longTapTimeout = this.swipeTimeout = this.x1 = this.x2 = this.y1 = this.y2 = this.preTapPosition = this.rotate = this.touchStart = this.multipointStart = this.multipointEnd = this.pinch = this.swipe = this.tap = this.doubleTap = this.longTap = this.singleTap = this.pressMove = this.touchMove = this.touchEnd = this.touchCancel = this.twoFingerPressMove = null;
-        // TODO: globalThis ???
         if (globalThis && typeof globalThis.removeEventListener === "function") {
             globalThis.removeEventListener('scroll', this._cancelAllHandler);
         }

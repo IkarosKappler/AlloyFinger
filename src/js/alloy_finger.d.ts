@@ -68,8 +68,8 @@ interface AlloyFingerOptions {
 declare type Handler<N extends EventName, E extends AFTouchEvent<N>> = (evt: E) => void;
 declare type Timer = ReturnType<typeof setTimeout>;
 declare class HandlerAdmin<N extends EventName> {
-    handlers: Array<Handler<N, AFTouchEvent<N>>>;
-    el: HTMLElement | SVGElement;
+    private handlers;
+    private el;
     constructor(el: HTMLElement | SVGElement);
     add(handler: Handler<N, AFTouchEvent<N>>): void;
     del(handler?: Handler<N, AFTouchEvent<N>>): void;
