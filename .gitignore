@@ -3,3 +3,14 @@ dist/
 .DS_Store
 npm-debug.log
 .idea/
+
+#*.*
+
+_alloy_crop/
+_react/
+_transformjs/
+
+package-lock.json
+
+*~
+

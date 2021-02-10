@@ -1,16 +1,22 @@
 {
-  "name": "alloyfinger",
+  "name": "alloyfigner-typescript",
   "version": "0.1.15",
-  "description": "super tiny size multi-touch gestures library for the web. ",
-  "main": "alloy_finger.js",
+  "description": "super tiny size multi-touch gestures library for the web. Cloned from alloyfinger",
+  "main": "dist/alloy_finger.js",
   "directories": {
     "example": "example"
   },
   "scripts": {
-    "prepare": "npm run build",
-    "build": "if [ -d dist ]; then rm -r dist; fi; npm run build:react",
-    "build:react": "babel react --out-dir dist/react --source-map",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "_prepare": "npm run build",
+    "_build": "if [ -d dist ]; then rm -r dist; fi; npm run build:react",
+    "_build:react": "babel react --out-dir dist/react --source-map",
+      "_test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run compile-typescript && rollup -c --input ./src/js/index.js && npm run webpack",
+    "compile-typescript": "tsc",
+    "test": "node -r reify test/suite.js",
+    "watch": "rollup -cw",
+    "start": "npm run watch & serve",
+    "webpack": "npx webpack --mode production --config ./webpack5-config.js"
   },
   "devDependencies": {
     "babel-cli": "^6.24.0",
@@ -25,21 +31,31 @@
     "babel-preset-react": "^6.24.1",
     "babel-runtime": "^6.23.0",
     "fast-async": "^6.2.2",
-    "husky": "^0.13.3"
+    "husky": "^0.13.3",
+    "rollup": "^2.38.5",
+    "rollup-plugin-buble": "^0.19.8",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "typescript": "^4.1.4",
+    "webpack": "^5.21.2",
+    "webpack-cli": "^4.5.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AlloyTeam/AlloyFinger.git"
+    "url": "git+https://github.com/IkarosKappler/AlloyFinger-Typescript.git"
   },
   "keywords": [
     "gesture",
     "touch",
-    "multitouch"
+    "multitouch",
+    "typescript"
   ],
   "author": "dntzhang",
+  "contributors": "Ikaros Kappler <info@int2byte.de>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/AlloyTeam/AlloyFinger/issues"
+    "url": "https://github.com/IkarosKappler/AlloyFinger-Typescript/issues"
   },
-  "homepage": "https://github.com/AlloyTeam/AlloyFinger#readme"
+  "homepage": "https://github.com/IkarosKappler/AlloyFinger#readme"
 }

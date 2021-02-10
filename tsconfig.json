@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+	"outDir": "./src/js",
+	"module": "commonjs",
+	
+	"target": "es5",
+	"lib": [ "es2015", "dom" ],
+	
+	"sourceMap": true,
+	"declaration": true,
+
+	"allowJs": false,
+
+	"forceConsistentCasingInFileNames": true,
+	"noImplicitReturns": false,
+	"noImplicitThis": false,
+	"noImplicitAny": false,
+	"strictNullChecks": false,
+	"suppressImplicitAnyIndexErrors": false,
+	"noUnusedLocals": false,
+	"noUnusedParameters": false
+
+    },
+    "include": ["./src/ts/*.ts"],
+    "exclude": ["./dist","./src/js","./src/_original"],
+    "removeComments": false
+}

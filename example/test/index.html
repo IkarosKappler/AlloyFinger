@@ -15,47 +15,52 @@
 <body style="text-align: center; font-family: Segoe UI Light,Segoe UI,Microsoft Jhenghei,Mirco Yahei,'sans-serif'; background-color: black; color: white;height: 1000px;">
     <div id="test" style="width: 280px; height: 200px; margin: 0 auto; line-height: 200px; font-size: 30px;">Touch Me</div>
     <div id="result" style="font-size: 18px;"></div>
-    <script src="../../alloy_finger.js"></script>
+    <!-- <script src="../../alloy_finger.js"></script> -->
+    <script src="../../dist/alloy_finger.js"></script>
+    <!-- <script src="../../dist/alloyfinger-typescript.js"></script> -->
     <div>
-        <script>
+         <script>
+	   // console.log( alloy_finger );
+	   console.log( AlloyFinger );
+	   // var AlloyFinger = alloy_finger;
 
             var result = document.querySelector("#result"),
                 testDiv = document.querySelector("#test"),
                 html = "";
 
             new AlloyFinger(testDiv, {
-                touchStart: function () {
+                touchStart: function () { console.log('touchStart');
                     html = "";
                     html += "start<br/>";
                     result.innerHTML = html;
                  
                 },
-                touchEnd: function () {
+                touchEnd: function () { console.log('touchEnd');
                     html += "end<br/>";
                     result.innerHTML = html;
                  
                 },
-                tap: function () {
+                tap: function () { console.log('tap');
                     html += "tap<br/>";
                     result.innerHTML = html;
                 },
-                rotate: function (evt) {
+                rotate: function (evt) { console.log('rotate');
                     html += "rotate [" + evt.angle + "]<br/>";
                     result.innerHTML = html;
                 },
-                pinch: function (evt) {
+                pinch: function (evt) { console.log('pinch');
                     html += "pinch [" + evt.scale + "]<br/>";
                     result.innerHTML = html;
                 },
-                pressMove: function (evt) {
+                pressMove: function (evt) { console.log('pressMove');
                     html += "pressMove [" + evt.deltaX.toFixed(4) + "|" + evt.deltaY.toFixed(4) + "]<br/>";
                     result.innerHTML = html;
                 },
-                swipe: function (evt) {
+                swipe: function (evt) { console.log('swipe');
                     html += "swipe [" + evt.direction+"]<br/>";
                     result.innerHTML = html;
                 },
-                twoFingerPressMove: function (evt) {
+                twoFingerPressMove: function (evt) { console.log('twoFingerPressMove');
                     html += "twoFingerPressMove [" + evt.deltaX.toFixed(4) + "|" + evt.deltaY.toFixed(4) + "]<br/>";
                     result.innerHTML = html;
                     evt.preventDefault();
