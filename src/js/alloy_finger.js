@@ -56,9 +56,9 @@ var HandlerAdmin = /** @class */ (function () {
     };
     ;
     HandlerAdmin.prototype.dispatch = function () {
-        var args = [];
+        var _args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
+            _args[_i] = arguments[_i];
         }
         for (var i = 0, len = this.handlers.length; i < len; i++) {
             var handler = this.handlers[i];
@@ -116,7 +116,10 @@ var AlloyFinger = /** @class */ (function () {
         this.touchEnd = wrapFunc(this.element, option.touchEnd || noop);
         this.touchCancel = wrapFunc(this.element, option.touchCancel || noop);
         this._cancelAllHandler = this.cancelAll.bind(this);
-        window.addEventListener('scroll', this._cancelAllHandler);
+        if (globalThis && typeof globalThis.addEventListener === "function") {
+            globalThis.addEventListener('scroll', this._cancelAllHandler);
+            // window.addEventListener('scroll', this._cancelAllHandler);
+        }
         this.delta = null;
         this.last = null;
         this.now = null;
@@ -271,7 +274,6 @@ var AlloyFinger = /** @class */ (function () {
         clearTimeout(this.swipeTimeout);
     };
     ;
-    // IS THIS USED???
     AlloyFinger.prototype.cancel = function (evt) {
         this.cancelAll();
         this.touchCancel.dispatch(evt, this.element);
@@ -292,13 +294,18 @@ var AlloyFinger = /** @class */ (function () {
     ;
     AlloyFinger.prototype.on = function (evt, handler) {
         if (this[evt]) {
-            this[evt].add(handler);
+            // Force the generic parameter into it's expected canditate here ;)
+            var admin = this[evt];
+            admin.add(handler);
         }
     };
     ;
     AlloyFinger.prototype.off = function (evt, handler) {
         if (this[evt]) {
-            this[evt].del(handler);
+            // Force the generic parameter into it's expected canditate here ;)
+            var admin = this[evt];
+            admin.del(handler);
+            // this[evt].del(handler);
         }
     };
     ;
@@ -331,21 +338,14 @@ var AlloyFinger = /** @class */ (function () {
         this.touchEnd.del();
         this.touchCancel.del();
         this.preV = this.pinchStartLen = this.zoom = this.isDoubleTap = this.delta = this.last = this.now = this.tapTimeout = this.singleTapTimeout = this.longTapTimeout = this.swipeTimeout = this.x1 = this.x2 = this.y1 = this.y2 = this.preTapPosition = this.rotate = this.touchStart = this.multipointStart = this.multipointEnd = this.pinch = this.swipe = this.tap = this.doubleTap = this.longTap = this.singleTap = this.pressMove = this.touchMove = this.touchEnd = this.touchCancel = this.twoFingerPressMove = null;
-        // TODO: globalThis ??? 
-        window.removeEventListener('scroll', this._cancelAllHandler);
-        // return null;
+        // TODO: globalThis ???
+        if (globalThis && typeof globalThis.removeEventListener === "function") {
+            globalThis.removeEventListener('scroll', this._cancelAllHandler);
+        }
     };
     ; // END destroy
     return AlloyFinger;
 }());
 exports.AlloyFinger = AlloyFinger;
 ;
-/*
-    if (typeof module !== 'undefined' && typeof exports === 'object') {
-        module.exports = AlloyFinger;
-    } else {
-        window.AlloyFinger = AlloyFinger;
-    }
-*/
-// }
 //# sourceMappingURL=alloy_finger.js.map

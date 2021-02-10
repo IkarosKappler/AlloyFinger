@@ -3,6 +3,10 @@ interface XYCoords {
     y: number;
 }
 declare type SwipeDirection = "Up" | "Right" | "Left" | "Down";
+/**
+ * These are the supported event names and exactly the event handlers in `this`.
+ * This allows direct handler access by name respecting Typescript restrictions.
+ */
 declare type EventName = "rotate" | "touchStart" | "multipointStart" | "multipointEnd" | "pinch" | "swipe" | "tap" | "doubleTap" | "longTap" | "singleTap" | "pressMove" | "twoFingerPressMove" | "touchMove" | "touchEnd" | "touchCancel";
 interface Touch {
     altitudeAngle: number;
@@ -24,7 +28,8 @@ interface Touch {
 interface TouchList extends Array<Touch> {
     item: (index: number) => Touch;
 }
-interface AFTouchEvent {
+interface AFTouchEvent<N extends EventName> {
+    _ename: N;
     touches: TouchList;
     angle: number;
     zoom: number;
@@ -32,43 +37,43 @@ interface AFTouchEvent {
     deltaY: number;
     direction: SwipeDirection;
 }
-export interface TouchRotateEvent extends Pick<AFTouchEvent, "touches" | "angle"> {
+export interface TouchRotateEvent extends Pick<AFTouchEvent<"rotate">, "touches" | "angle"> {
 }
-export interface TouchPinchEvent extends Pick<AFTouchEvent, "touches" | "zoom"> {
+export interface TouchPinchEvent extends Pick<AFTouchEvent<"pinch">, "touches" | "zoom"> {
 }
-export interface TouchMoveEvent extends Pick<AFTouchEvent, "touches" | "deltaX" | "deltaY"> {
+export interface TouchMoveEvent extends Pick<AFTouchEvent<"touchMove">, "touches" | "deltaX" | "deltaY"> {
 }
-export interface TouchPressMoveEvent extends Pick<AFTouchEvent, "touches" | "deltaX" | "deltaY"> {
+export interface TouchPressMoveEvent extends Pick<AFTouchEvent<"pressMove">, "touches" | "deltaX" | "deltaY"> {
 }
-export interface TouchSwipeEvent extends Pick<AFTouchEvent, "touches" | "direction"> {
+export interface TouchSwipeEvent extends Pick<AFTouchEvent<"swipe">, "touches" | "direction"> {
 }
-declare type fn = (evt: any) => void;
+export declare type fn<E> = (evt: E) => void;
 interface AlloyFingerOptions {
-    rotate?: fn;
-    touchStart?: fn;
-    multipointStart?: fn;
-    multipointEnd?: fn;
-    pinch?: fn;
-    swipe?: fn;
-    tap?: fn;
-    doubleTap?: fn;
-    longTap?: fn;
-    singleTap?: fn;
-    pressMove?: fn;
-    twoFingerPressMove?: fn;
-    touchMove?: fn;
-    touchEnd?: fn;
-    touchCancel?: fn;
+    rotate?: fn<TouchRotateEvent>;
+    touchStart?: fn<AFTouchEvent<"touchStart">>;
+    multipointStart?: fn<AFTouchEvent<"multipointStart">>;
+    multipointEnd?: fn<AFTouchEvent<"multipointEnd">>;
+    pinch?: fn<TouchPinchEvent>;
+    swipe?: fn<TouchSwipeEvent>;
+    tap?: fn<AFTouchEvent<"tap">>;
+    doubleTap?: fn<AFTouchEvent<"doubleTap">>;
+    longTap?: fn<AFTouchEvent<"longTap">>;
+    singleTap?: fn<AFTouchEvent<"singleTap">>;
+    pressMove?: fn<TouchPressMoveEvent>;
+    twoFingerPressMove?: fn<TouchPressMoveEvent>;
+    touchMove?: fn<TouchMoveEvent>;
+    touchEnd?: fn<AFTouchEvent<"touchEnd">>;
+    touchCancel?: fn<AFTouchEvent<"touchCancel">>;
 }
-declare type Handler = (evt: any) => void;
+declare type Handler<N extends EventName, E extends AFTouchEvent<N>> = (evt: E) => void;
 declare type Timer = ReturnType<typeof setTimeout>;
-declare class HandlerAdmin {
-    handlers: Array<Handler>;
+declare class HandlerAdmin<N extends EventName> {
+    handlers: Array<Handler<N, AFTouchEvent<N>>>;
     el: HTMLElement | SVGElement;
     constructor(el: HTMLElement | SVGElement);
-    add(handler: Handler): void;
-    del(handler?: Handler): void;
-    dispatch(...args: any[]): void;
+    add(handler: Handler<N, AFTouchEvent<N>>): void;
+    del(handler?: Handler<N, AFTouchEvent<N>>): void;
+    dispatch(..._args: any[]): void;
 }
 /**
  * @classdesc The AlloyFinger main class. Use this to add handler functions for
@@ -80,21 +85,21 @@ export declare class AlloyFinger {
     pinchStartLen: number;
     zoom: number;
     isDoubleTap: boolean;
-    rotate: HandlerAdmin;
-    touchStart: HandlerAdmin;
-    multipointStart: HandlerAdmin;
-    multipointEnd: HandlerAdmin;
-    pinch: HandlerAdmin;
-    swipe: HandlerAdmin;
-    tap: HandlerAdmin;
-    doubleTap: HandlerAdmin;
-    longTap: HandlerAdmin;
-    singleTap: HandlerAdmin;
-    pressMove: HandlerAdmin;
-    twoFingerPressMove: HandlerAdmin;
-    touchMove: HandlerAdmin;
-    touchEnd: HandlerAdmin;
-    touchCancel: HandlerAdmin;
+    rotate: HandlerAdmin<"rotate">;
+    touchStart: HandlerAdmin<"touchStart">;
+    multipointStart: HandlerAdmin<"multipointStart">;
+    multipointEnd: HandlerAdmin<"multipointEnd">;
+    pinch: HandlerAdmin<"pinch">;
+    swipe: HandlerAdmin<"swipe">;
+    tap: HandlerAdmin<"tap">;
+    doubleTap: HandlerAdmin<"doubleTap">;
+    longTap: HandlerAdmin<"longTap">;
+    singleTap: HandlerAdmin<"singleTap">;
+    pressMove: HandlerAdmin<"pressMove">;
+    twoFingerPressMove: HandlerAdmin<"twoFingerPressMove">;
+    touchMove: HandlerAdmin<"touchMove">;
+    touchEnd: HandlerAdmin<"touchEnd">;
+    touchCancel: HandlerAdmin<"touchCancel">;
     _cancelAllHandler: () => void;
     delta: number;
     last: number;
@@ -117,11 +122,11 @@ export declare class AlloyFinger {
     end(event: TouchEvent): void;
     cancelAll(): void;
     cancel(evt: TouchEvent): void;
-    _cancelLongTap(): void;
-    _cancelSingleTap(): void;
+    private _cancelLongTap;
+    private _cancelSingleTap;
     private _swipeDirection;
-    on(evt: EventName, handler: Handler): void;
-    off(evt: EventName, handler: Handler): void;
+    on<N extends EventName>(evt: N, handler: Handler<N, AFTouchEvent<N>>): void;
+    off<N extends EventName>(evt: N, handler: Handler<N, AFTouchEvent<N>>): void;
     destroy(): void;
 }
 export {};
