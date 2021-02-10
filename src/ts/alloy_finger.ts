@@ -116,7 +116,6 @@ interface AlloyFingerOptions {
     touchCancel? : fn<AFTouchEvent<"touchCancel">>;
 }
 
-// type Handler = ( evt : AFTouchEvent ) => void;
 type Handler<N extends EventName, E extends AFTouchEvent<N>> = ( evt : E ) => void;
 
 type Timer = ReturnType<typeof setTimeout>;
