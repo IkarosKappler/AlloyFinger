@@ -1,8 +1,6 @@
 /**
- * TypeScript port by Ikaros Kappler.
+ * Example usage of AlloyFinger.
  *
- * Original file from https://github.com/AlloyTeam/AlloyFinger
- *
- * @date 2021-02-10
+ * @date 2021-02-12
  */
 export {};
