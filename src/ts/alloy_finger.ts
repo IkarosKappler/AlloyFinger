@@ -7,16 +7,25 @@
  * @version 0.1.15
  */
 
+
+/**
+ * A basic vector interface {x,y}. Used to identify points on the plane.
+ */
 interface XYCoords {
     x : number;
     y : number;
 };
 
-type SwipeDirection = "Up" | "Right" | "Left" | "Down";
 
 /**
- * These are the supported event names and exactly the event handlers in `this`.
- * This allows direct handler access by name respecting Typescript restrictions.
+ * Constants identifying swipe directions, as their names say.
+ */
+type SwipeDirection = "Up" | "Right" | "Left" | "Down";
+
+
+/**
+ * These are the supported event names and exactly match the event handlers in `this`.
+ * This allows direct handler access by name respecting Typescript's type restrictions.
  */
 type EventName =
     "rotate" |
@@ -36,34 +45,11 @@ type EventName =
     "touchCancel";
 
 
-
-//--- Define Touch interfaces ----------------------------------------------------
-//--- This is just for internal use. ---------------------------------------------
-interface Touch {
-    altitudeAngle : number;
-    azimuthAngle : number;
-    clientX : number;
-    clientY : number;
-    force : number;
-    identifier : number;
-    pageX : number;
-    pageY : number;
-    radiusX : number;
-    radiusY : number;
-    rotationAngle : number;
-    screenX : number;
-    screenY : number;
-    target : Element;
-    touchType : number;
-}
-
-interface TouchList extends Array<Touch> {
-    item : (index:number)=>Touch;
-}
-
-interface AFTouchGenericEvent<N extends EventName> {
+/**
+ * A basic (extended) touch event interface for different AlloyFinger event types.
+ */
+interface AFTouchGenericEvent<N extends EventName> extends TouchEvent {
     _ename : N; // This is just here to use the generic parameter 'N' at least once
-    touches : TouchList;
     angle : number;
     zoom : number;
     deltaX : number;
@@ -71,63 +57,80 @@ interface AFTouchGenericEvent<N extends EventName> {
     direction : SwipeDirection;
 }
 
-interface AFTouchEvent<N extends EventName> extends Pick<AFTouchGenericEvent<N>, "touches"> {
-}
+/** A simple touch event. Nothing special. */
+export interface AFTouchEvent<N extends EventName> extends Pick<AFTouchGenericEvent<N>, "touches"> {}
 
+/** A 'touchRotate' touch event. Has. */
 export interface TouchRotateEvent
-extends Pick<AFTouchGenericEvent<"rotate">, "touches" | "angle"> {
-}
+extends Omit<AFTouchGenericEvent<"rotate">, "_ename" | "zoom" | "deltaX" | "deltaY" | "direction">  {}
 
 export interface TouchPinchEvent
-extends Pick<AFTouchGenericEvent<"pinch">, "touches" | "zoom"> {
-}
+extends Omit<AFTouchGenericEvent<"pinch">, "_ename" | "angle" | "deltaX" | "deltaY" | "direction"> {}
 
 export interface TouchMoveEvent
-extends Pick<AFTouchGenericEvent<"touchMove">, "touches" | "deltaX" | "deltaY"> {
-}
+extends Omit<AFTouchGenericEvent<"touchMove">, "_ename" | "angle" | "zoom" | "direction"> {}
 
 export interface TouchPressMoveEvent
-extends Pick<AFTouchGenericEvent<"pressMove">, "touches" | "deltaX" | "deltaY"> {
-}
+extends Omit<AFTouchGenericEvent<"pressMove">, "_ename" | "angle" | "zoom" | "direction"> {}
 
 export interface TouchSwipeEvent
-extends Pick<AFTouchGenericEvent<"swipe">, "touches" | "direction"> {
-}
-//--- END Touch interfaces ----------------------------------------------------
+extends Omit<AFTouchGenericEvent<"swipe">, "_ename" | "angle" | "zoom" | "deltaX" | "deltaY"> {}
 
+export type TouchCallback<E> = (evt:E) => void;
 
-export type fn<E> = (evt:E) => void;
-
-interface AlloyFingerOptions {
-    rotate? : fn<TouchRotateEvent>;
-    touchStart? : fn<AFTouchEvent<"touchStart">>;
-    multipointStart? : fn<AFTouchEvent<"multipointStart">>;
-    multipointEnd? : fn<AFTouchEvent<"multipointEnd">>;
-    pinch? : fn<TouchPinchEvent>;
-    swipe? : fn<TouchSwipeEvent>;
-    tap? : fn<AFTouchEvent<"tap">>;
-    doubleTap? : fn<AFTouchEvent<"doubleTap">>;
-    longTap? : fn<AFTouchEvent<"longTap">>;
-    singleTap? : fn<AFTouchEvent<"singleTap">>;
-    pressMove? : fn<TouchPressMoveEvent>;
-    twoFingerPressMove? : fn<TouchPressMoveEvent>;
-    touchMove? : fn<TouchMoveEvent>;
-    touchEnd? : fn<AFTouchEvent<"touchEnd">>;
-    touchCancel? : fn<AFTouchEvent<"touchCancel">>;
+export interface AlloyFingerOptions {
+    rotate? : TouchCallback<TouchRotateEvent>;
+    touchStart? : TouchCallback<AFTouchEvent<"touchStart">>;
+    multipointStart? : TouchCallback<AFTouchEvent<"multipointStart">>;
+    multipointEnd? : TouchCallback<AFTouchEvent<"multipointEnd">>;
+    pinch? : TouchCallback<TouchPinchEvent>;
+    swipe? : TouchCallback<TouchSwipeEvent>;
+    tap? : TouchCallback<AFTouchEvent<"tap">>;
+    doubleTap? : TouchCallback<AFTouchEvent<"doubleTap">>;
+    longTap? : TouchCallback<AFTouchEvent<"longTap">>;
+    singleTap? : TouchCallback<AFTouchEvent<"singleTap">>;
+    pressMove? : TouchCallback<TouchPressMoveEvent>;
+    twoFingerPressMove? : TouchCallback<TouchPressMoveEvent>;
+    touchMove? : TouchCallback<TouchMoveEvent>;
+    touchEnd? : TouchCallback<AFTouchEvent<"touchEnd">>;
+    touchCancel? : TouchCallback<AFTouchEvent<"touchCancel">>;
 }
 
-type Handler<N extends EventName, E extends AFTouchEvent<N>> = ( evt : E ) => void;
+export type Handler<N extends EventName, E extends AFTouchEvent<N>> = ( evt : E ) => void;
+
 
 type Timer = ReturnType<typeof setTimeout>;
 
+/**
+ * Tiny math function to calculate the length of a vector in euclidean space.
+ *
+ * @param {XYCoords} v - The vector in {x,y} notation.
+ * @return {number} The length of the vector.
+ */
 const getLen = ( v : XYCoords ) : number => {
     return Math.sqrt(v.x * v.x + v.y * v.y);
 }
 
+
+/**
+ * Tiny math function to calculate the dot product of two vectors.
+ *
+ * @param {XYCoords} v1 - The first vector in {x,y} notation.
+ * @param {XYCoords} v2 - The second vector in {x,y} notation.
+ * @return {number} The dot product of both vectors.
+ */
 const dot = ( v1 : XYCoords, v2 : XYCoords ) : number => {
     return v1.x * v2.x + v1.y * v2.y;
 }
 
+
+/**
+ * Tiny math function to calculate the angle between two vectors.
+ *
+ * @param {XYCoords} v1 - The first vector in {x,y} notation.
+ * @param {XYCoords} v2 - The second vector in {x,y} notation.
+ * @return {number} The angle (in radians) between the two vectors.
+ */
 const getAngle = ( v1 : XYCoords, v2 : XYCoords ) : number => {
     const mr : number = getLen(v1) * getLen(v2);
     if (mr === 0) return 0;
@@ -136,10 +139,26 @@ const getAngle = ( v1 : XYCoords, v2 : XYCoords ) : number => {
     return Math.acos(r);
 }
 
+
+/**
+ * Tiny math function to calculate the cross product of two vectors.
+ *
+ * @param {XYCoords} v1 - The first vector in {x,y} notation.
+ * @param {XYCoords} v2 - The second vector in {x,y} notation.
+ * @return {number} The cross product of both vectors.
+ */
 const cross = ( v1 : XYCoords, v2 : XYCoords ) : number => {
     return v1.x * v2.y - v2.x * v1.y;
 }
 
+
+/**
+ * Tiny math function to calculate the rotate-angle (in degrees) for two vectors.
+ *
+ * @param {XYCoords} v1 - The first vector in {x,y} notation.
+ * @param {XYCoords} v2 - The second vector in {x,y} notation.
+ * @return {number} The rotate-angle in degrees for the two vectors.
+ */
 const getRotateAngle = ( v1 : XYCoords, v2 : XYCoords ) : number => {
     var angle : number = getAngle(v1, v2);
     if (cross(v1, v2) > 0) {
@@ -149,6 +168,9 @@ const getRotateAngle = ( v1 : XYCoords, v2 : XYCoords ) : number => {
     return angle * 180 / Math.PI;
 }
 
+/**
+ * A HandlerAdmin holds all the added event handlers for one kind of event type.
+ */
 class HandlerAdmin<N extends EventName> {
     
     private handlers : Array<Handler<N,AFTouchEvent<N>>>;
@@ -185,13 +207,14 @@ class HandlerAdmin<N extends EventName> {
 
 
 /**
- * A wrapper for handlers.
+ * A wrapper for handler functions; converts the passed handler function into a HadlerAdmin instance..
  */
 const wrapFunc = <N extends EventName>( el : HTMLElement | SVGElement, handler : Handler<N,AFTouchEvent<N>> ) : HandlerAdmin<N> => {
     const handlerAdmin : HandlerAdmin<N> = new HandlerAdmin<N>(el);
     handlerAdmin.add(handler);
     return handlerAdmin;
 };
+
 
 /**
  * @classdesc The AlloyFinger main class. Use this to add handler functions for 
@@ -251,7 +274,7 @@ export class AlloyFinger {
 	this.move = this.move.bind(this);
 	this.end = this.end.bind(this);
 	this.cancel = this.cancel.bind(this);
-	
+
 	this.element.addEventListener("touchstart", this.start, false);
 	this.element.addEventListener("touchmove", this.move, false);
 	this.element.addEventListener("touchend", this.end, false);
@@ -262,7 +285,7 @@ export class AlloyFinger {
 	this.zoom = 1;
 	this.isDoubleTap = false;
 
-	var noop = function () { };
+	const noop : () => void = () => {};
 
 	this.rotate = wrapFunc(this.element, option.rotate || noop);
 	this.touchStart = wrapFunc(this.element, option.touchStart || noop);
@@ -284,7 +307,6 @@ export class AlloyFinger {
 
 	if( globalThis && typeof globalThis.addEventListener === "function" ) {
 	    globalThis.addEventListener('scroll', this._cancelAllHandler);
-	    // window.addEventListener('scroll', this._cancelAllHandler);
 	}
 
 	this.delta = null;
@@ -299,7 +321,7 @@ export class AlloyFinger {
     };
 
     // AlloyFinger.prototype = {
-    start( evt : TouchEvent ) {
+    start( evt : TouchEvent ) { 
         if (!evt.touches) return;
 	const _self : AlloyFinger = this;
         this.now = Date.now();
@@ -314,36 +336,36 @@ export class AlloyFinger {
         this.preTapPosition.x = this.x1;
         this.preTapPosition.y = this.y1;
         this.last = this.now;
-        var preV = this.preV,
-        len = evt.touches.length;
+        const preV : XYCoords = this.preV;
+        const len : number = evt.touches.length;
         if (len > 1) {
             this._cancelLongTap();
             this._cancelSingleTap();
-            var v = { x: evt.touches[1].pageX - this.x1, y: evt.touches[1].pageY - this.y1 };
+            const v : XYCoords = { x: evt.touches[1].pageX - this.x1, y: evt.touches[1].pageY - this.y1 };
             preV.x = v.x;
             preV.y = v.y;
             this.pinchStartLen = getLen(preV);
             this.multipointStart.dispatch(evt, this.element);
         }
         this._preventTap = false;
-        this.longTapTimeout = setTimeout(function () {
+        this.longTapTimeout = setTimeout( (() => {
             _self.longTap.dispatch(evt, _self.element);
             _self._preventTap = true;
-        }.bind(this), 750);
+        }).bind(_self), 750);
     };
     
     move( event : TouchEvent ) {
         if (!event.touches) return;
 	const afEvent : AFTouchGenericEvent<any> = (event as unknown) as AFTouchGenericEvent<any>;
-        var preV = this.preV,
-        len = event.touches.length,
-        currentX = event.touches[0].pageX,
-        currentY = event.touches[0].pageY;
+        const preV : XYCoords = this.preV;
+        const len : number = event.touches.length;
+        const currentX : number = event.touches[0].pageX;
+        const currentY : number = event.touches[0].pageY;
         this.isDoubleTap = false;
         if (len > 1) {
-            var sCurrentX = afEvent.touches[1].pageX,
-            sCurrentY = afEvent.touches[1].pageY
-            var v = { x: afEvent.touches[1].pageX - currentX, y: afEvent.touches[1].pageY - currentY };
+            const sCurrentX : number = afEvent.touches[1].pageX;
+            const sCurrentY : number = afEvent.touches[1].pageY;
+            const v : XYCoords = { x: afEvent.touches[1].pageX - currentX, y: afEvent.touches[1].pageY - currentY };
 
             if (preV.x !== null) {
                 if (this.pinchStartLen > 0) {
@@ -375,8 +397,13 @@ export class AlloyFinger {
 
                 //move事件中添加对当前触摸点到初始触摸点的判断，
                 //如果曾经大于过某个距离(比如10),就认为是移动到某个地方又移回来，应该不再触发tap事件才对。
-                var movedX = Math.abs(this.x1 - this.x2),
-                movedY = Math.abs(this.y1 - this.y2);
+		//
+		// translation:
+		//    Add the judgment of the current touch point to the initial touch point in the event,
+                //    If it has been greater than a certain distance (such as 10), it is considered to be
+		//    moved to a certain place and then moved back, and the tap event should no longer be triggered.
+                const movedX : number = Math.abs(this.x1 - this.x2);
+                const movedY : number = Math.abs(this.y1 - this.y2);
 
                 if(movedX > 10 || movedY > 10){
                     this._preventTap = true;
@@ -406,7 +433,7 @@ export class AlloyFinger {
         if (!event.changedTouches) return;
 	const afEvent : AFTouchGenericEvent<any> = (event as unknown) as AFTouchGenericEvent<any>;
         this._cancelLongTap();
-        var self : AlloyFinger = this;
+        const self : AlloyFinger = this;
         if (afEvent.touches.length < 2) {
             this.multipointEnd.dispatch(afEvent as AFTouchEvent<"multipointEnd">, this.element);
             this.sx2 = this.sy2 = null;
@@ -476,7 +503,7 @@ export class AlloyFinger {
 
     on<N extends EventName>( evt : N, handler : Handler<N, AFTouchEvent<N>> ) : void {	
         if(this[evt]) {
-	    // Force the generic parameter into it's expected canditate here ;)
+	    // Force the generic parameter into it's expected candidate here ;)
 	    const admin : HandlerAdmin<N> = (this[evt] as HandlerAdmin<N>);
 	    admin.add(handler);
         }
@@ -484,17 +511,25 @@ export class AlloyFinger {
 
     off<N extends EventName>( evt : N, handler : Handler<N, AFTouchEvent<N>> ) : void {	
         if(this[evt]) {
-	    // Force the generic parameter into it's expected canditate here ;)
+	    // Force the generic parameter into it's expected candidate here ;)
 	    const admin : HandlerAdmin<N> = (this[evt] as HandlerAdmin<N>);
 	    admin.del(handler);
         }
     }; 
 
     destroy() : void {
-        if(this.singleTapTimeout) clearTimeout(this.singleTapTimeout);
-        if(this.tapTimeout) clearTimeout(this.tapTimeout);
-        if(this.longTapTimeout) clearTimeout(this.longTapTimeout);
-        if(this.swipeTimeout) clearTimeout(this.swipeTimeout);
+        if(this.singleTapTimeout) {
+	    clearTimeout(this.singleTapTimeout);
+	}
+        if(this.tapTimeout) {
+	    clearTimeout(this.tapTimeout);
+	}
+        if(this.longTapTimeout) {
+	    clearTimeout(this.longTapTimeout);
+	}
+        if(this.swipeTimeout) {
+	    clearTimeout(this.swipeTimeout);
+	}
 
         this.element.removeEventListener("touchstart", this.start);
         this.element.removeEventListener("touchmove", this.move);

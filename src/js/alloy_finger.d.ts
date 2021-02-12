@@ -1,74 +1,67 @@
+/**
+ * A basic vector interface {x,y}. Used to identify points on the plane.
+ */
 interface XYCoords {
     x: number;
     y: number;
 }
+/**
+ * Constants identifying swipe directions, as their names say.
+ */
 declare type SwipeDirection = "Up" | "Right" | "Left" | "Down";
 /**
- * These are the supported event names and exactly the event handlers in `this`.
- * This allows direct handler access by name respecting Typescript restrictions.
+ * These are the supported event names and exactly match the event handlers in `this`.
+ * This allows direct handler access by name respecting Typescript's type restrictions.
  */
 declare type EventName = "rotate" | "touchStart" | "multipointStart" | "multipointEnd" | "pinch" | "swipe" | "tap" | "doubleTap" | "longTap" | "singleTap" | "pressMove" | "twoFingerPressMove" | "touchMove" | "touchEnd" | "touchCancel";
-interface Touch {
-    altitudeAngle: number;
-    azimuthAngle: number;
-    clientX: number;
-    clientY: number;
-    force: number;
-    identifier: number;
-    pageX: number;
-    pageY: number;
-    radiusX: number;
-    radiusY: number;
-    rotationAngle: number;
-    screenX: number;
-    screenY: number;
-    target: Element;
-    touchType: number;
-}
-interface TouchList extends Array<Touch> {
-    item: (index: number) => Touch;
-}
-interface AFTouchGenericEvent<N extends EventName> {
+/**
+ * A basic (extended) touch event interface for different AlloyFinger event types.
+ */
+interface AFTouchGenericEvent<N extends EventName> extends TouchEvent {
     _ename: N;
-    touches: TouchList;
     angle: number;
     zoom: number;
     deltaX: number;
     deltaY: number;
     direction: SwipeDirection;
 }
-interface AFTouchEvent<N extends EventName> extends Pick<AFTouchGenericEvent<N>, "touches"> {
+/** A simple touch event. Nothing special. */
+export interface AFTouchEvent<N extends EventName> extends Pick<AFTouchGenericEvent<N>, "touches"> {
 }
-export interface TouchRotateEvent extends Pick<AFTouchGenericEvent<"rotate">, "touches" | "angle"> {
+/** A 'touchRotate' touch event. Has. */
+export interface TouchRotateEvent extends Omit<AFTouchGenericEvent<"rotate">, "_ename" | "zoom" | "deltaX" | "deltaY" | "direction"> {
 }
-export interface TouchPinchEvent extends Pick<AFTouchGenericEvent<"pinch">, "touches" | "zoom"> {
+export interface TouchPinchEvent extends Omit<AFTouchGenericEvent<"pinch">, "_ename" | "angle" | "deltaX" | "deltaY" | "direction"> {
 }
-export interface TouchMoveEvent extends Pick<AFTouchGenericEvent<"touchMove">, "touches" | "deltaX" | "deltaY"> {
+export interface TouchMoveEvent extends Omit<AFTouchGenericEvent<"touchMove">, "_ename" | "angle" | "zoom" | "direction"> {
 }
-export interface TouchPressMoveEvent extends Pick<AFTouchGenericEvent<"pressMove">, "touches" | "deltaX" | "deltaY"> {
+export interface TouchPressMoveEvent extends Omit<AFTouchGenericEvent<"pressMove">, "_ename" | "angle" | "zoom" | "direction"> {
 }
-export interface TouchSwipeEvent extends Pick<AFTouchGenericEvent<"swipe">, "touches" | "direction"> {
+export interface TouchSwipeEvent extends Omit<AFTouchGenericEvent<"swipe">, "_ename" | "angle" | "zoom" | "deltaX" | "deltaY"> {
 }
-export declare type fn<E> = (evt: E) => void;
-interface AlloyFingerOptions {
-    rotate?: fn<TouchRotateEvent>;
-    touchStart?: fn<AFTouchEvent<"touchStart">>;
-    multipointStart?: fn<AFTouchEvent<"multipointStart">>;
-    multipointEnd?: fn<AFTouchEvent<"multipointEnd">>;
-    pinch?: fn<TouchPinchEvent>;
-    swipe?: fn<TouchSwipeEvent>;
-    tap?: fn<AFTouchEvent<"tap">>;
-    doubleTap?: fn<AFTouchEvent<"doubleTap">>;
-    longTap?: fn<AFTouchEvent<"longTap">>;
-    singleTap?: fn<AFTouchEvent<"singleTap">>;
-    pressMove?: fn<TouchPressMoveEvent>;
-    twoFingerPressMove?: fn<TouchPressMoveEvent>;
-    touchMove?: fn<TouchMoveEvent>;
-    touchEnd?: fn<AFTouchEvent<"touchEnd">>;
-    touchCancel?: fn<AFTouchEvent<"touchCancel">>;
+export declare type TouchCallback<E> = (evt: E) => void;
+export interface AlloyFingerOptions {
+    rotate?: TouchCallback<TouchRotateEvent>;
+    touchStart?: TouchCallback<AFTouchEvent<"touchStart">>;
+    multipointStart?: TouchCallback<AFTouchEvent<"multipointStart">>;
+    multipointEnd?: TouchCallback<AFTouchEvent<"multipointEnd">>;
+    pinch?: TouchCallback<TouchPinchEvent>;
+    swipe?: TouchCallback<TouchSwipeEvent>;
+    tap?: TouchCallback<AFTouchEvent<"tap">>;
+    doubleTap?: TouchCallback<AFTouchEvent<"doubleTap">>;
+    longTap?: TouchCallback<AFTouchEvent<"longTap">>;
+    singleTap?: TouchCallback<AFTouchEvent<"singleTap">>;
+    pressMove?: TouchCallback<TouchPressMoveEvent>;
+    twoFingerPressMove?: TouchCallback<TouchPressMoveEvent>;
+    touchMove?: TouchCallback<TouchMoveEvent>;
+    touchEnd?: TouchCallback<AFTouchEvent<"touchEnd">>;
+    touchCancel?: TouchCallback<AFTouchEvent<"touchCancel">>;
 }
-declare type Handler<N extends EventName, E extends AFTouchEvent<N>> = (evt: E) => void;
+export declare type Handler<N extends EventName, E extends AFTouchEvent<N>> = (evt: E) => void;
 declare type Timer = ReturnType<typeof setTimeout>;
+/**
+ * A HandlerAdmin holds all the added event handlers for one kind of event type.
+ */
 declare class HandlerAdmin<N extends EventName> {
     private handlers;
     private el;

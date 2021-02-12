@@ -10,12 +10,32 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AlloyFinger = void 0;
 ;
+/**
+ * Tiny math function to calculate the length of a vector in euclidean space.
+ *
+ * @param {XYCoords} v - The vector in {x,y} notation.
+ * @return {number} The length of the vector.
+ */
 var getLen = function (v) {
     return Math.sqrt(v.x * v.x + v.y * v.y);
 };
+/**
+ * Tiny math function to calculate the dot product of two vectors.
+ *
+ * @param {XYCoords} v1 - The first vector in {x,y} notation.
+ * @param {XYCoords} v2 - The second vector in {x,y} notation.
+ * @return {number} The dot product of both vectors.
+ */
 var dot = function (v1, v2) {
     return v1.x * v2.x + v1.y * v2.y;
 };
+/**
+ * Tiny math function to calculate the angle between two vectors.
+ *
+ * @param {XYCoords} v1 - The first vector in {x,y} notation.
+ * @param {XYCoords} v2 - The second vector in {x,y} notation.
+ * @return {number} The angle (in radians) between the two vectors.
+ */
 var getAngle = function (v1, v2) {
     var mr = getLen(v1) * getLen(v2);
     if (mr === 0)
@@ -25,9 +45,23 @@ var getAngle = function (v1, v2) {
         r = 1;
     return Math.acos(r);
 };
+/**
+ * Tiny math function to calculate the cross product of two vectors.
+ *
+ * @param {XYCoords} v1 - The first vector in {x,y} notation.
+ * @param {XYCoords} v2 - The second vector in {x,y} notation.
+ * @return {number} The cross product of both vectors.
+ */
 var cross = function (v1, v2) {
     return v1.x * v2.y - v2.x * v1.y;
 };
+/**
+ * Tiny math function to calculate the rotate-angle (in degrees) for two vectors.
+ *
+ * @param {XYCoords} v1 - The first vector in {x,y} notation.
+ * @param {XYCoords} v2 - The second vector in {x,y} notation.
+ * @return {number} The rotate-angle in degrees for the two vectors.
+ */
 var getRotateAngle = function (v1, v2) {
     var angle = getAngle(v1, v2);
     if (cross(v1, v2) > 0) {
@@ -35,6 +69,9 @@ var getRotateAngle = function (v1, v2) {
     }
     return angle * 180 / Math.PI;
 };
+/**
+ * A HandlerAdmin holds all the added event handlers for one kind of event type.
+ */
 var HandlerAdmin = /** @class */ (function () {
     function HandlerAdmin(el) {
         this.handlers = [];
@@ -71,7 +108,7 @@ var HandlerAdmin = /** @class */ (function () {
     return HandlerAdmin;
 }()); // END class HandlerAdmin
 /**
- * A wrapper for handlers.
+ * A wrapper for handler functions; converts the passed handler function into a HadlerAdmin instance..
  */
 var wrapFunc = function (el, handler) {
     var handlerAdmin = new HandlerAdmin(el);
@@ -118,7 +155,6 @@ var AlloyFinger = /** @class */ (function () {
         this._cancelAllHandler = this.cancelAll.bind(this);
         if (globalThis && typeof globalThis.addEventListener === "function") {
             globalThis.addEventListener('scroll', this._cancelAllHandler);
-            // window.addEventListener('scroll', this._cancelAllHandler);
         }
         this.delta = null;
         this.last = null;
@@ -149,7 +185,8 @@ var AlloyFinger = /** @class */ (function () {
         this.preTapPosition.x = this.x1;
         this.preTapPosition.y = this.y1;
         this.last = this.now;
-        var preV = this.preV, len = evt.touches.length;
+        var preV = this.preV;
+        var len = evt.touches.length;
         if (len > 1) {
             this._cancelLongTap();
             this._cancelSingleTap();
@@ -160,20 +197,24 @@ var AlloyFinger = /** @class */ (function () {
             this.multipointStart.dispatch(evt, this.element);
         }
         this._preventTap = false;
-        this.longTapTimeout = setTimeout(function () {
+        this.longTapTimeout = setTimeout((function () {
             _self.longTap.dispatch(evt, _self.element);
             _self._preventTap = true;
-        }.bind(this), 750);
+        }).bind(_self), 750);
     };
     ;
     AlloyFinger.prototype.move = function (event) {
         if (!event.touches)
             return;
         var afEvent = event;
-        var preV = this.preV, len = event.touches.length, currentX = event.touches[0].pageX, currentY = event.touches[0].pageY;
+        var preV = this.preV;
+        var len = event.touches.length;
+        var currentX = event.touches[0].pageX;
+        var currentY = event.touches[0].pageY;
         this.isDoubleTap = false;
         if (len > 1) {
-            var sCurrentX = afEvent.touches[1].pageX, sCurrentY = afEvent.touches[1].pageY;
+            var sCurrentX = afEvent.touches[1].pageX;
+            var sCurrentY = afEvent.touches[1].pageY;
             var v = { x: afEvent.touches[1].pageX - currentX, y: afEvent.touches[1].pageY - currentY };
             if (preV.x !== null) {
                 if (this.pinchStartLen > 0) {
@@ -203,7 +244,13 @@ var AlloyFinger = /** @class */ (function () {
                 afEvent.deltaY = currentY - this.y2;
                 //move事件中添加对当前触摸点到初始触摸点的判断，
                 //如果曾经大于过某个距离(比如10),就认为是移动到某个地方又移回来，应该不再触发tap事件才对。
-                var movedX = Math.abs(this.x1 - this.x2), movedY = Math.abs(this.y1 - this.y2);
+                //
+                // translation:
+                //    Add the judgment of the current touch point to the initial touch point in the event,
+                //    If it has been greater than a certain distance (such as 10), it is considered to be
+                //    moved to a certain place and then moved back, and the tap event should no longer be triggered.
+                var movedX = Math.abs(this.x1 - this.x2);
+                var movedY = Math.abs(this.y1 - this.y2);
                 if (movedX > 10 || movedY > 10) {
                     this._preventTap = true;
                 }
@@ -293,7 +340,7 @@ var AlloyFinger = /** @class */ (function () {
     ;
     AlloyFinger.prototype.on = function (evt, handler) {
         if (this[evt]) {
-            // Force the generic parameter into it's expected canditate here ;)
+            // Force the generic parameter into it's expected candidate here ;)
             var admin = this[evt];
             admin.add(handler);
         }
@@ -301,21 +348,25 @@ var AlloyFinger = /** @class */ (function () {
     ;
     AlloyFinger.prototype.off = function (evt, handler) {
         if (this[evt]) {
-            // Force the generic parameter into it's expected canditate here ;)
+            // Force the generic parameter into it's expected candidate here ;)
             var admin = this[evt];
             admin.del(handler);
         }
     };
     ;
     AlloyFinger.prototype.destroy = function () {
-        if (this.singleTapTimeout)
+        if (this.singleTapTimeout) {
             clearTimeout(this.singleTapTimeout);
-        if (this.tapTimeout)
+        }
+        if (this.tapTimeout) {
             clearTimeout(this.tapTimeout);
-        if (this.longTapTimeout)
+        }
+        if (this.longTapTimeout) {
             clearTimeout(this.longTapTimeout);
-        if (this.swipeTimeout)
+        }
+        if (this.swipeTimeout) {
             clearTimeout(this.swipeTimeout);
+        }
         this.element.removeEventListener("touchstart", this.start);
         this.element.removeEventListener("touchmove", this.move);
         this.element.removeEventListener("touchend", this.end);

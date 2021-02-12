@@ -1,7 +1,9 @@
 ### Prologue
 
-This is the Typescript port of the famous AlloyFinger
-touch library → [https://github.com/AlloyTeam/AlloyFinger/](https://github.com/AlloyTeam/AlloyFinger/)
+This is the Typescript port of the useful AlloyFinger
+touch library
+
+→ [https://github.com/AlloyTeam/AlloyFinger/](https://github.com/AlloyTeam/AlloyFinger/)
 
 
 # AlloyFinger-Typescript
