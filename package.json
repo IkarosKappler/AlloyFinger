@@ -1,5 +1,5 @@
 {
-  "name": "alloyfigner-typescript",
+  "name": "alloyfinger-typescript",
   "version": "0.1.15",
   "description": "super tiny size multi-touch gestures library for the web. Cloned from alloyfinger",
   "main": "dist/alloy_finger.js",
@@ -7,10 +7,7 @@
     "example": "example"
   },
   "scripts": {
-    "_prepare": "npm run build",
-    "_build": "if [ -d dist ]; then rm -r dist; fi; npm run build:react",
-    "_build:react": "babel react --out-dir dist/react --source-map",
-      "_test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm run compile-typescript && rollup -c --input ./src/js/index.js && npm run webpack",
     "compile-typescript": "tsc",
     "test": "node -r reify test/suite.js",
