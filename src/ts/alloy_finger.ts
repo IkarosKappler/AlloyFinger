@@ -562,3 +562,4 @@ export class AlloyFinger {
 };
 
 
+export default AlloyFinger;

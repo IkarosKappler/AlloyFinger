@@ -124,4 +124,4 @@ export declare class AlloyFinger {
     off<N extends EventName>(evt: N, handler: Handler<N, AFTouchEvent<N>>): void;
     destroy(): void;
 }
-export {};
+export default AlloyFinger;

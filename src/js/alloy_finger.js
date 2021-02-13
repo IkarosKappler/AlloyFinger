@@ -396,4 +396,5 @@ var AlloyFinger = /** @class */ (function () {
 }());
 exports.AlloyFinger = AlloyFinger;
 ;
+exports.default = AlloyFinger;
 //# sourceMappingURL=alloy_finger.js.map
