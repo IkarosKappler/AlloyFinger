@@ -9,7 +9,7 @@
             margin: 0;
             padding: 0;
             border: 0;
-            background-color: #ccc;
+            background-color: #f0f0f0;
             text-align: center;
            font: 14px / 1.5 "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;
         }
@@ -23,6 +23,9 @@
             font-size: 20px;
             line-height: 40px;
         }
+	.forkinfo {
+	    padding-bottom : 2em;
+	}
         .title{
             height: 30px;
             color:#333333;
@@ -34,7 +37,8 @@
         }
         .imgBox{
             margin-bottom: 10px;
-            border-bottom: 1px solid #333333;
+            border-bottom: 1px solid #d0d0d0;
+	    padding: 3em;
         }
         .swipeBox{
             height:160px;
@@ -45,6 +49,7 @@
             position: relative;
             border: 2px solid #ccc;
             box-sizing: border-box;
+	    padding: 3em;
         }
         .scroll{
             width: 480px;
@@ -112,13 +117,9 @@
             top: 60px;
             left: 60px;
         }
-        .pb6{
-            padding-bottom: 6px;
-        }
-
         .ribbon {
-            top: 3.2em;
-            right: -3.7em;
+            top: 1.6em;
+            right: -4.0em;
             -webkit-transform: rotate(45deg);
             -moz-transform: rotate(45deg);
             -ms-transform: rotate(45deg);
@@ -126,7 +127,7 @@
             transform: rotate(45deg);
             color:#fff;
             display: block;
-            padding: .6em 3.5em;
+            padding: .6em 4.5em;
             position: fixed;
             text-align: center;
             text-decoration: none;
@@ -134,7 +135,7 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
-            background-color: green;
+            background-color: teal;
             z-index: 10000;
         }
 
@@ -147,7 +148,7 @@
             height: 45px;
             font-size: 24px;
             line-height: 45px;
-            background-color: green;
+            background-color: teal;
             -moz-border-radius: 2px;
             -webkit-border-radius: 2px;
             border-radius: 2px;
@@ -168,9 +169,10 @@
     </style>
 </head>
 <body>
-<a href="https://github.com/AlloyTeam/AlloyFinger" class="ribbon">Fork me on Github</a>
-    <div class="header">AlloyFinger</div>
+<a href="https://github.com/IkarosKappler/AlloyFinger-Typescript" class="ribbon">Fork me again<br>on Github</a>
+    <div class="header">AlloyFinger-Typescript</div>
     <div class="example">
+    <div class="forkinfo">forked from <a href="https://github.com/AlloyTeam/AlloyFinger">AlloyTeam</a></div>
     <div class="title">pinch</div>
     <div class="imgBox">
         <img id="pinchImg" src="asset/test.png" />
@@ -192,20 +194,20 @@
         <img id="doubleTapImg" src="asset/test.png" />
     </div>
     <div class="title">swipe</div>
-        <div class="imgBox pb6">
-    <div class="swipeBox">
-        <div class="scroll"  id="swipeScroll">
-            <img  src="asset/test.png" /> <img  src="asset/test2.png" /> <img  src="asset/test3.png" />
-        </div>
-        <div class="nuclear-nav">
-            <a data-index="0" class="active"></a>
-            <a data-index="1" class=" "></a>
-            <a data-index="2" class=" "></a>
-        </div>
-    </div>
+        <div class="imgBox">
+	  <div class="swipeBox">
+            <div class="scroll"  id="swipeScroll">
+              <img  src="asset/test.png" /> <img  src="asset/test2.png" /> <img  src="asset/test3.png" />
+            </div>
+            <div class="nuclear-nav">
+              <a data-index="0" class="active"></a>
+              <a data-index="1" class=" "></a>
+              <a data-index="2" class=" "></a>
+            </div>
+	  </div>
         </div>
     <div class="title">longTap</div>
-        <div class="imgBox pb6">
+        <div class="imgBox">
     <div class=" longTapBox" id="longTapBox">
         <img id="longTapImg" src="asset/test.png" />
         <div class="overlay" id="overlay">
@@ -215,7 +217,7 @@
         </div>
 
         <div class="title">tap</div>
-        <div class="imgBox pb6">
+        <div class="imgBox">
             <div class=" longTapBox" id="tapBox">
                 <img  src="asset/test.png" />
                 <div class="overlay2" id="overlay2">
@@ -225,10 +227,10 @@
         </div>
     </div>
     <div class="footer">
-       <div> <a class="btn" href="http://alloyteam.github.io/AlloyFinger/example/picture/">综合例子→</a></div>
+       <div> <a class="btn" href="http://alloyteam.github.io/AlloyFinger/example/picture/" title="综合例子→">Example</a></div>
     </div>
     <script src="asset/transform.js"></script>
-    <script src="alloy_finger.js"></script>
+    <script src="dist/alloy_finger.js"></script>
     <script src="asset/to.js"></script>
     <script>
         var pinchImg = document.getElementById("pinchImg");
