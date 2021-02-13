@@ -4,12 +4,12 @@
  * @date 2021-02-12
  */
 
-import { AlloyFinger,
-	 TouchMoveEvent,
-	 TouchPinchEvent,
-	 TouchPressMoveEvent,
-	 TouchRotateEvent,
-	 TouchSwipeEvent } from './alloy_finger';
+
+import AlloyFinger, { TouchMoveEvent,
+		      TouchPinchEvent,
+		      TouchPressMoveEvent,
+		      TouchRotateEvent,
+		      TouchSwipeEvent } from "./index";
 
 new AlloyFinger( document.getElementsByTagName('body')[0], {
     touchStart: (_evt : TouchEvent) => 

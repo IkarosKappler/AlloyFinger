@@ -5,8 +5,8 @@
  * @date 2021-02-12
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-var alloy_finger_1 = require("./alloy_finger");
-new alloy_finger_1.AlloyFinger(document.getElementsByTagName('body')[0], {
+var index_1 = require("./index");
+new index_1.default(document.getElementsByTagName('body')[0], {
     touchStart: function (_evt) {
         return console.log('touchStart');
     },

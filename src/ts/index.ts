@@ -6,7 +6,18 @@
  * @date 2021-02-10
  */
 
-import { AlloyFinger } from './alloy_finger';
+import { AlloyFinger,
+	 TouchMoveEvent,
+	 TouchPinchEvent,
+	 TouchPressMoveEvent,
+	 TouchRotateEvent,
+	 TouchSwipeEvent  } from './alloy_finger';
 
+export { AlloyFinger,
+	 TouchMoveEvent,
+	 TouchPinchEvent,
+	 TouchPressMoveEvent,
+	 TouchRotateEvent,
+	 TouchSwipeEvent };
 export default AlloyFinger;
 

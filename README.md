@@ -67,12 +67,11 @@ af = af.destroy();
 
 ### Typescript (this is new)
 ```typescript
-import { AlloyFinger,
-	 TouchMoveEvent,
-	 TouchPinchEvent,
-	 TouchPressMoveEvent,
-	 TouchRotateEvent,
-	 TouchSwipeEvent } from './alloy_finger';
+import AlloyFinger, { TouchMoveEvent,
+		      TouchPinchEvent,
+		      TouchPressMoveEvent,
+		      TouchRotateEvent,
+		      TouchSwipeEvent } from "alloyfinger-typescript/src/ts/index";
 
 new AlloyFinger( document.getElementsByTagName('body')[0], {
     touchStart: (_evt : TouchEvent) => 

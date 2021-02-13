@@ -3,12 +3,14 @@
   "version": "0.1.16",
   "description": "super tiny size multi-touch gestures library for the web. Cloned from alloyfinger",
   "main": "dist/alloy_finger.js",
+  "types": "dist/types/index.d.ts",
   "directories": {
     "example": "example"
   },
   "scripts": {
     "test": "node -r reify test/suite.js",
-    "build": "npm run compile-typescript && rollup -c --input ./src/js/index.js && npm run webpack",
+    "build": "npm run compile-typescript && rollup -c --input ./src/js/index.js && npm run webpack && npm run copy-types",
+    "copy-types": "mkdir -p ./dist/types/ && cp ./src/js/*.d.ts ./dist/types/",
     "compile-typescript": "tsc",
     "watch": "rollup -cw",
     "start": "npm run watch & serve",
