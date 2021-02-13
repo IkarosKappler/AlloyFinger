@@ -2,7 +2,7 @@
   "name": "alloyfinger-typescript",
   "version": "0.1.16",
   "description": "super tiny size multi-touch gestures library for the web. Cloned from alloyfinger",
-  "main": "dist/alloy_finger.js",
+  "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
   "directories": {
     "example": "example"
