@@ -1,16 +1,31 @@
 const webpack = require('webpack');
 const path = require('path');
 
-module.exports = {
-    // https://webpack.js.org/configuration/mode/
-    mode: 'production',
-    entry: './src/js/entry.js',
-    output: {
-	path: path.resolve(__dirname, './dist'),
-	filename: 'alloy_finger.min.js'
+module.exports = [
+    {
+	// https://webpack.js.org/configuration/mode/
+	mode: 'production',
+	entry: './src/js/entry.js',
+	output: {
+	    path: path.resolve(__dirname, './dist'),
+	    filename: 'alloy_finger.browser.js'
+	},
+	devtool: 'source-map',
+	optimization: {
+            minimize: false
+	}
     },
-    devtool: 'source-map',
-    optimization: {
-        minimize: true
+    {
+	// https://webpack.js.org/configuration/mode/
+	mode: 'production',
+	entry: './src/js/entry.js',
+	output: {
+	    path: path.resolve(__dirname, './dist'),
+	    filename: 'alloy_finger.browser.min.js'
+	},
+	devtool: 'source-map',
+	optimization: {
+            minimize: true
+	}
     }
-};
+];

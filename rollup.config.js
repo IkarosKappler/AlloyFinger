@@ -5,8 +5,13 @@ import { terser } from "rollup-plugin-terser";
 import { version, author, license, description } from './package.json';
 // import fs from 'fs';
 
-const moduleName = 'AlloyFinger'; // alloy_finger';
-const name = "alloy_finger";
+// FOR BROWSER THIS WORKS
+//const moduleName = 'AlloyFinger'; // alloy_finger';
+
+// FOR MODULE???
+const moduleName = 'alloy_finger';
+
+const name = "index.es6"; // "alloy_finger";
 
 const banner = `\
 /**

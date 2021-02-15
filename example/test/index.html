@@ -13,9 +13,13 @@
 <body style="text-align: center; font-family: Segoe UI Light,Segoe UI,Microsoft Jhenghei,Mirco Yahei,'sans-serif'; background-color: black; color: white;height: 1000px;">
     <div id="test" style="width: 280px; height: 200px; margin: 0 auto; line-height: 200px; font-size: 30px;">Touch Me</div>
     <div id="result" style="font-size: 18px;"></div>
-    <script src="../../dist/alloy_finger.js"></script>
+    <script src="../../dist/alloy_finger.browser.min.js"></script>
     <div>
          <script>
+
+	   console.log("AlloyFinger", AlloyFinger );
+	   console.log("AlloyFinger", AlloyFinger.constructor );
+	
             var result = document.querySelector("#result"),
                 testDiv = document.querySelector("#test"),
                 html = "";
