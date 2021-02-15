@@ -4,7 +4,7 @@
  * Github: https://github.com/IkarosKappler/AlloyFinger-Typescript
  *
  * @date    2021-02-10 (Typescript port)
- * @version 0.1.15
+ * @version 0.1.18
  */
 
 
@@ -320,7 +320,6 @@ export class AlloyFinger {
 	this.preTapPosition = { x: null, y: null };
     };
 
-    // AlloyFinger.prototype = {
     start( evt : TouchEvent ) { 
         if (!evt.touches) return;
 	const _self : AlloyFinger = this;

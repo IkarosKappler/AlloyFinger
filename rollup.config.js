@@ -7,10 +7,10 @@ import { version, author, license, description } from './package.json';
 
 // FOR BROWSER THIS WORKS
 //const moduleName = 'AlloyFinger'; // alloy_finger';
+//const name = "index.es6"; // "alloy_finger";
 
 // FOR MODULE???
-const moduleName = 'alloy_finger';
-
+const moduleName = 'alloyfinger-typescript';
 const name = "index.es6"; // "alloy_finger";
 
 const banner = `\
