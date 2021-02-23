@@ -3,13 +3,7 @@ import commonjs from 'rollup-plugin-commonjs';
 import buble    from 'rollup-plugin-buble';
 import { terser } from "rollup-plugin-terser";
 import { version, author, license, description } from './package.json';
-// import fs from 'fs';
 
-// FOR BROWSER THIS WORKS
-//const moduleName = 'AlloyFinger'; // alloy_finger';
-//const name = "index.es6"; // "alloy_finger";
-
-// FOR MODULE???
 const moduleName = 'alloyfinger-typescript';
 const name = "index.es6"; // "alloy_finger";
 
@@ -25,7 +19,7 @@ const banner = `\
 `;
 
 module.exports = [{
-  input: 'src/index.js',
+  input: 'src/cjs/index.js',
   output: {
     file: `dist/${name}.js`,
     name: moduleName,
@@ -39,7 +33,7 @@ module.exports = [{
     buble()
   ]
 }, {
-  input: `src/index.js`,
+  input: `src/cjs/index.js`,
   output: {
     file: `dist/${name}.min.js`,
     name: moduleName,

@@ -2,19 +2,19 @@
   "name": "alloyfinger-typescript",
   "version": "0.1.18",
   "description": "super tiny size multi-touch gestures library for the web. Cloned from alloyfinger",
-  "main": "src/js/index.js",
-  "module": "dist/index.es6.js",
-  "types": "dist/types/index.d.ts",
+  "main": "src/cjs/index.js",
+  "module": "src/esm/index.js",
+  "types": "src/cjs/index.d.ts",
   "directories": {
     "example": "example"
   },
   "scripts": {
     "test": "node -r reify test/suite.js",
-    "build-module": "npm run compile-typescript && rollup -c --input ./src/js/index.js && npm run copy-types",
-    "build-browser": "npm run compile-typescript && npm run webpack && cp dist/alloy_finger.browser.min.js dist/alloy_finger.js && npm run copy-types",
-    "build": "npm run compile-typescript && rollup -c --input ./src/js/index.js && npm run webpack && npm run copy-types",
-    "copy-types": "mkdir -p ./dist/types/ && cp ./src/js/*.d.ts ./dist/types/",
-    "compile-typescript": "tsc -p tsconfig.json",
+    "build-module": "npm run compile-typescript-module && rollup -c --input ./src/cjs/index.js",
+    "build-browser": "npm run compile-typescript-browser && npm run webpack && cp dist/alloy_finger.browser.min.js dist/alloy_finger.js",
+    "build": "npm run build-module && npm run build-browser",
+    "compile-typescript-browser": "tsc -p tsconfig.browser.json",
+    "compile-typescript-module": "tsc -p tsconfig.module.json",
     "watch": "rollup -cw",
     "start": "npm run watch & serve",
     "webpack": "npx webpack --mode production --config ./webpack5-config.js"

@@ -127,3 +127,9 @@ Have fun and do good!
 
 ## License
 This content is released under the [MIT](http://opensource.org/licenses/MIT) License.
+
+
+
+### Credits
+* AlloyTeam for the js-code.
+* Jack Frankling for then [howto-module-tutorial](https://blog.logrocket.com/publishing-node-modules-typescript-es-modules/)
