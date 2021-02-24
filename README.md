@@ -132,4 +132,4 @@ This content is released under the [MIT](http://opensource.org/licenses/MIT) Lic
 
 ### Credits
 * AlloyTeam for the js-code.
-* Jack Franklin for then [howto-module-tutorial](https://blog.logrocket.com/publishing-node-modules-typescript-es-modules/)
+* Jack Franklin for the [howto-module-tutorial](https://blog.logrocket.com/publishing-node-modules-typescript-es-modules/)
